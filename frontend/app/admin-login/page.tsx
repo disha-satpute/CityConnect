@@ -9,25 +9,38 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const res = await fetch('/api/admin-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+    // Dummy admin user data
+    const dummyAdmins = [
+      {
+        email: 'superadmin@cityconnect.com',
+        password: 'super123',
+        role: 'superadmin',
+      },
+      {
+        email: 'officer@cityconnect.com',
+        password: 'officer123',
+        role: 'officer',
+      },
+      {
+        email: 'deptadmin@cityconnect.com',
+        password: 'dept123',
+        role: 'department_admin',
+      },
+    ];
 
-      const data = await res.json();
+    const foundUser = dummyAdmins.find(
+      (user) => user.email === email && user.password === password
+    );
 
-      if (res.ok) {
-        router.push('/admin-dashboard');
-      } else {
-        setError(data.message || 'Login failed');
-      }
-    } catch (err) {
-      setError('Something went wrong. Please try again.');
+    if (foundUser) {
+      localStorage.setItem('role', foundUser.role);
+      localStorage.setItem('email', foundUser.email);
+      router.push('/admin-redirect'); // Redirect to role-based dashboard
+    } else {
+      setError('Invalid email or password');
     }
   };
 

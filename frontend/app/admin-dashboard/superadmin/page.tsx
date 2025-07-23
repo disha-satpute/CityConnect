@@ -9,25 +9,17 @@ import {
   Users,
   AlertTriangle,
   Eye,
-  Building2,
-  ShieldCheck,
+  Building2,      // 🏢 for Departments
+  ShieldCheck     // 👮‍♂️ for Officers
 } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [role, setRole] = useState('');
-  const [authorized, setAuthorized] = useState(true);
 
   useEffect(() => {
     const storedRole = localStorage.getItem('role');
-    if (storedRole) {
-      setRole(storedRole);
-      if (storedRole !== 'superadmin') {
-        setAuthorized(false);
-      }
-    } else {
-      setAuthorized(false);
-    }
+    if (storedRole) setRole(storedRole);
   }, []);
 
   const NavButton = ({ icon: Icon, label, tab }: any) => (
@@ -44,17 +36,6 @@ export default function AdminDashboard() {
     </button>
   );
 
-  if (!authorized) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-gray-100 text-center px-4">
-        <div className="bg-white p-6 rounded shadow-md">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">⛔ Unauthorized Access</h2>
-          <p className="text-gray-700">You are not allowed to view this page. Only Super Admins can access it.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
@@ -66,12 +47,18 @@ export default function AdminDashboard() {
         <NavButton icon={Clock} label="Pending" tab="pending" />
         <NavButton icon={AlertTriangle} label="Urgent" tab="urgent" />
         <NavButton icon={Eye} label="Activity" tab="activity" />
+
+        {/* 🔰 New Tabs */}
         <NavButton icon={Building2} label="Departments" tab="departments" />
         <NavButton icon={ShieldCheck} label="Officers" tab="officers" />
 
-        {/* SuperAdmin Extras */}
-        <NavButton icon={Users} label="Users" tab="users" />
-        <NavButton icon={Settings} label="Settings" tab="settings" />
+        {/* Only for SuperAdmin */}
+        {role === 'superadmin' && (
+          <>
+            <NavButton icon={Users} label="Users" tab="users" />
+            <NavButton icon={Settings} label="Settings" tab="settings" />
+          </>
+        )}
       </aside>
 
       {/* Main Content */}
@@ -96,7 +83,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Dynamic Content */}
+        {/* Dynamic Tab Content */}
         <div className="mt-10">
           <p className="text-gray-500">
             Content for the <strong>{activeTab}</strong> tab will appear here.
