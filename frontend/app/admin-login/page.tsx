@@ -1,84 +1,47 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
-export default function AdminLoginPage() {
+import { useState } from 'react';
+import { Button } from '../../components/ui/button';
+export default function AdminLogin() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Dummy admin user data
-    const dummyAdmins = [
-      {
-        email: 'superadmin@cityconnect.com',
-        password: 'super123',
-        role: 'superadmin',
-      },
-      {
-        email: 'officer@cityconnect.com',
-        password: 'officer123',
-        role: 'officer',
-      },
-      {
-        email: 'deptadmin@cityconnect.com',
-        password: 'dept123',
-        role: 'department_admin',
-      },
-    ];
-
-    const foundUser = dummyAdmins.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (foundUser) {
-      localStorage.setItem('role', foundUser.role);
-      localStorage.setItem('email', foundUser.email);
-      router.push('/admin-redirect'); // Redirect to role-based dashboard
-    } else {
-      setError('Invalid email or password');
+    // dummy validation
+    if (email && password) {
+      router.push('/admin-dashboard');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Admin Login</h2>
-
-        {error && <p className="text-red-500 mb-4 text-sm">{error}</p>}
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Email</label>
-          <input
-            type="email"
-            className="w-full px-3 py-2 border rounded shadow-sm"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="mb-6">
-          <label className="block text-sm font-medium mb-1">Password</label>
-          <input
-            type="password"
-            className="w-full px-3 py-2 border rounded shadow-sm"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold"
-        >
+    <div className="min-h-screen flex items-center justify-center bg-blue-50">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded-lg p-8 w-full max-w-md"
+      >
+        <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">Admin Login</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full border border-gray-300 rounded-md p-2 mb-4"
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full border border-gray-300 rounded-md p-2 mb-6"
+          required
+        />
+        <Button type="submit" className="w-full bg-blue-600 text-white hover:bg-blue-700">
           Login
-        </button>
+        </Button>
       </form>
     </div>
   );

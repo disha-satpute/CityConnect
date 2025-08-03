@@ -1,80 +1,158 @@
-// app/store/page.tsx
+"use client";
 
-'use client';
+import { useState } from "react";
+import { ShoppingCart, Filter, Leaf, Gift, Star, MapPin, MessageCircle, Award } from "lucide-react";
 
-import { motion } from 'framer-motion';
-import { ShoppingCart, Leaf, BadgeCheck } from 'lucide-react';
-import { Card, CardContent } from '../../components/ui/card';
-import Image from 'next/image';
+export default function EcoStore() {
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
 
-const storeItems = [
-  {
-    id: 1,
-    name: 'Eco Water Bottle',
-    description: 'Made from 100% recycled plastic. Eco-friendly & reusable.',
-    image: '/images/water-bottle.jpg',
-    coins: 120,
-  },
-  {
-    id: 2,
-    name: 'Organic Tote Bag',
-    description: 'Made from sustainable cotton. Durable and washable.',
-    image: '/images/tote-bag.jpg',
-    coins: 90,
-  },
-  {
-    id: 3,
-    name: 'Plantable Notebook',
-    description: 'Notebook with seeds embedded in pages. Grow after use!',
-    image: '/images/notebook.jpg',
-    coins: 150,
-  },
-];
+  const categories = [
+    "All Categories",
+    "Lifestyle",
+    "Transport",
+    "Environment",
+    "Technology",
+  ];
 
-export default function StorePage() {
+  const products = [
+    {
+      name: "Reusable Water Bottle",
+      description: "Eco-friendly stainless steel water bottle",
+      category: "Lifestyle",
+      price: 150,
+      stock: 25,
+      image: "/bottle.jpg",
+    },
+    {
+      name: "Public Transit Pass",
+      description: "Monthly public transportation pass",
+      category: "Transport",
+      price: 300,
+      stock: 100,
+      image: "/transit-pass.jpg",
+    },
+    {
+      name: "Tree Planting Certificate",
+      description: "Sponsor a tree in the city park",
+      category: "Environment",
+      price: 500,
+      stock: 15,
+      image: "/tree-cert.jpg",
+    },
+  ];
+
+  const features = [
+    {
+      icon: <Leaf className="w-6 h-6 text-green-600" />,
+      title: "Earn EcoCoins",
+      description: "Report civic issues or participate in eco-activities to earn coins.",
+    },
+    {
+      icon: <Gift className="w-6 h-6 text-blue-600" />,
+      title: "Redeem Sustainable Goods",
+      description: "Use EcoCoins to redeem useful, eco-friendly products from the store.",
+    },
+    {
+      icon: <Star className="w-6 h-6 text-yellow-500" />,
+      title: "Get Recognized",
+      description: "Top contributors get highlighted on the leaderboard and earn rewards.",
+    },
+    {
+      icon: <MapPin className="w-6 h-6 text-red-500" />,
+      title: "Live Issue Heatmap",
+      description: "Visualize city issues by severity and location with real-time map updates.",
+    },
+    {
+      icon: <MessageCircle className="w-6 h-6 text-indigo-500" />,
+      title: "Multilingual Chatbot",
+      description: "Get instant help in your preferred language using the AI Assistant.",
+    },
+    {
+      icon: <Award className="w-6 h-6 text-purple-600" />,
+      title: "Gamified Profiles",
+      description: "Earn badges, climb leaderboards, and boost your civic profile.",
+    },
+  ];
+
+  const filteredProducts = selectedCategory === "All Categories"
+    ? products
+    : products.filter((p) => p.category === selectedCategory);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <motion.h1
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-4xl font-bold text-center text-green-600 mb-12"
-      >
-        Eco Store – Redeem Your EcoCoins
-      </motion.h1>
+    <div className="min-h-screen bg-[#f1f5f9]">
+      {/* Navbar */}
+      <div className="w-full bg-white shadow p-4 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <img src="/logo.svg" alt="Logo" className="w-6 h-6" />
+          <h1 className="text-lg font-semibold">CityConnect</h1>
+        </div>
+        <div className="flex gap-4 text-sm font-medium text-gray-600">
+          <a href="/" className="hover:text-blue-600">Home</a>
+          <a href="/report-issue" className="hover:text-blue-600">Report Issue</a>
+          <a href="/my-reports" className="hover:text-blue-600">My Reports</a>
+          <a href="/store" className="text-blue-600 font-bold">Eco Store</a>
+          <a href="/news" className="hover:text-blue-600">News</a>
+          <a href="/ai-assistant" className="hover:text-blue-600">AI Assistant</a>
+        </div>
+        <button className="bg-purple-600 text-white px-4 py-1 rounded">Admin</button>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {storeItems.map((item, idx) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.2 }}
+      {/* Balance Section */}
+      <div className="p-6">
+        <div className="bg-green-100 p-4 rounded text-green-800 font-semibold mb-4 flex justify-between items-center">
+          <div>
+            <p>Your EcoCoins Balance</p>
+            <h2 className="text-2xl font-bold">1,250 EC</h2>
+          </div>
+          <p className="text-green-600">Earned this month +350 EC</p>
+        </div>
+
+        {/* Features */}
+        <div className="grid md:grid-cols-3 gap-6 my-10">
+          {features.map((feature, idx) => (
+            <div key={idx} className="bg-white rounded-lg shadow p-6 text-center border border-gray-100">
+              <div className="mb-3 flex justify-center">{feature.icon}</div>
+              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+              <p className="text-gray-600 text-sm">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Filter Dropdown */}
+        <div className="flex items-center gap-2 mb-4">
+          <Filter className="text-gray-600" />
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="border px-3 py-2 rounded shadow-sm"
           >
-            <Card className="hover:scale-[1.02] transition-transform duration-300 border shadow-md rounded-2xl bg-white">
-              <CardContent className="p-4 space-y-3">
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  width={400}
-                  height={250}
-                  className="rounded-xl object-cover w-full h-48"
-                />
-                <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                  <Leaf className="text-green-600 w-5 h-5" /> {item.name}
-                </h2>
-                <p className="text-sm text-gray-600">{item.description}</p>
-                <div className="flex justify-between items-center pt-2">
-                  <span className="text-md font-medium text-green-700">
-                    {item.coins} EcoCoins
-                  </span>
-                  <button className="bg-green-600 text-white px-4 py-1 text-sm rounded-full hover:bg-green-700 flex items-center gap-1">
-                    <ShoppingCart className="w-4 h-4" /> Redeem
-                  </button>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Product Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProducts.map((product, idx) => (
+            <div key={idx} className="bg-white rounded shadow p-4">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-40 object-cover rounded mb-3"
+              />
+              <h3 className="font-bold text-lg mb-1">{product.name}</h3>
+              <p className="text-gray-600 text-sm mb-2">{product.description}</p>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-green-600 font-semibold">{product.price} EC</span>
+                <span className="text-xs text-gray-500">{product.stock} in stock</span>
+              </div>
+              <button className="bg-blue-500 text-white px-4 py-2 rounded flex items-center gap-1 w-full justify-center">
+                <ShoppingCart size={16} /> Redeem
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
