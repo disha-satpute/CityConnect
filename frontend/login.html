@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Select User Type</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+
+    .header {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #1e40af;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      background-color: #7c3aed;
+      color: #fff;
+      padding: 0.5rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .login-wrapper {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .login-wrapper h2 {
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-wrapper h3 {
+      color: #dc2626;
+      margin-bottom: 2rem;
+      font-size: 1.5rem;
+    }
+
+    .user-type-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    .user-type-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    .user-type-card:hover {
+      transform: translateY(-5px);
+      background-color: #f9fafb;
+    }
+
+    .user-type-card i {
+      font-size: 2.5rem;
+      color: #1d4ed8;
+      margin-bottom: 1rem;
+    }
+
+    .user-type-card span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #1e293b;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>CityConnect</h1>
+    <div class="btn-group">
+      <a href="#" class="btn">Register</a>
+      <a href="#" class="btn">Login</a>
+    </div>
+  </header>
+
+  <div class="login-wrapper">
+    <h2>Login</h2>
+    <h3>Select User Type</h3>
+
+    <div class="user-type-container">
+      <div class="user-type-card" onclick="window.location.href='user-login.html'">
+        <i class="fas fa-user-graduate"></i>
+        <span>User</span>
+      </div>
+
+      <div class="user-type-card" onclick="window.location.href='superadmin-login.html'">
+        <i class="fas fa-user-shield"></i>
+        <span>Super Admin</span>
+      </div>
+
+      <div class="user-type-card" onclick="window.location.href='officeradmin-login.html'">
+        <i class="fas fa-user-tie"></i>
+        <span>Officer Admin</span>
+      </div>
+
+      <div class="user-type-card" onclick="window.location.href='departmentadmin-login.html'">
+        <i class="fas fa-building"></i>
+        <span>Department Admin</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -119,7 +119,7 @@ export default function Home() {
 
           <Link href="/admin-login">
             <Button className="bg-purple-600 hover:bg-purple-700 text-white text-sm px-4 py-2 rounded-md">
-              Admin
+              Login
             </Button>
           </Link>
         </div>
@@ -147,7 +147,7 @@ export default function Home() {
           </Link>
           <Link href="/admin-login">
             <Button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3">
-              🔐 Admin Login
+              🔐 Login
             </Button>
           </Link>
         </div>
