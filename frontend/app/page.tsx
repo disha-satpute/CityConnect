@@ -76,6 +76,7 @@ export default function Home() {
           <li><Link href="/store" className="hover:text-blue-600">Eco Store</Link></li>
           <li><Link href="/news" className="hover:text-blue-600">News</Link></li>
           <li><Link href="/tasks" className="hover:text-blue-600">AI Assistant</Link></li>
+          
         </ul>
 
         <div className="flex items-center gap-4">
