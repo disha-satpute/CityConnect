@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { loginAdmin } = require('../controllers/authController');
-const verifyAdminToken = require('../middlewares/authMiddleware');
+const verifyAdminToken = require('./authMiddleware');
 
 // Public route
 router.post('/login', loginAdmin);
