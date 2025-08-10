@@ -1,6 +1,5 @@
 -- Database: cityconnect
-
--- DROP DATABASE IF EXISTS cityconnect;
+ DROP DATABASE IF EXISTS cityconnect;
 
 CREATE DATABASE cityconnect
     WITH
@@ -17,11 +16,7 @@ SELECT table_name
 FROM information_schema.tables
 WHERE table_schema = 'public';
 
-select * from users;
-
--- =========================
--- USERS TABLE (Simplified)
--- =========================
+-- USERS TABLE (Citizens)
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(150) UNIQUE NOT NULL,
@@ -34,18 +29,14 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- =========================
 -- DEPARTMENTS TABLE
--- =========================
 CREATE TABLE departments (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT
 );
 
--- =========================
--- ADMINS TABLE (Separate from users)
--- =========================
+-- ADMINS TABLE
 CREATE TABLE admins (
     id SERIAL PRIMARY KEY,
     username VARCHAR(150) UNIQUE NOT NULL,
@@ -60,25 +51,22 @@ CREATE TABLE admins (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- =========================
--- REPORTS TABLE
--- =========================
+-- REPORTS TABLE (Complaint Tracking)
 CREATE TABLE reports (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    department_id INT REFERENCES departments(id) ON DELETE SET NULL,
     category VARCHAR(20) CHECK (category IN ('pothole', 'garbage', 'lighting', 'other')),
     title VARCHAR(100),
     description TEXT,
     image VARCHAR(255),
     location VARCHAR(255) NOT NULL,
-    status VARCHAR(20) CHECK (status IN ('Pending', 'Resolved', 'Rejected')) DEFAULT 'Pending',
+    status VARCHAR(20) CHECK (status IN ('Pending', 'In Process', 'Resolved', 'Rejected')) DEFAULT 'Pending',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     admin_feedback TEXT
 );
 
--- =========================
 -- TASKS TABLE
--- =========================
 CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -92,9 +80,7 @@ CREATE TABLE tasks (
     task_type VARCHAR(20) CHECK (task_type IN ('cleanup', 'awareness', 'donation'))
 );
 
--- =========================
 -- NEWS TABLE
--- =========================
 CREATE TABLE news (
     id SERIAL PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -103,9 +89,7 @@ CREATE TABLE news (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- =========================
 -- CONTACT MESSAGES TABLE
--- =========================
 CREATE TABLE contact_messages (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE SET NULL,
@@ -115,9 +99,7 @@ CREATE TABLE contact_messages (
     submitted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- =========================
 -- REDEMPTIONS TABLE
--- =========================
 CREATE TABLE redemptions (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
