@@ -1,63 +1,80 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { Card } from '../../../components/ui/card';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-const roles = [
-  {
-    label: 'User Login',
-    route: '/login/user',
-    icon: '/icons/student.png',
-  },
-  {
-    label: 'Super Admin',
-    route: '/login/super',
-    icon: '/icons/university.png',
-  },
-  {
-    label: 'Department Admin',
-    route: '/login/department',
-    icon: '/icons/city-dept.png',
-  },
-  {
-    label: 'Officer Admin',
-    route: '/login/officer',
-    icon: '/icons/employer.png',
-  },
-];
-
-export default function SelectRolePage() {
+export default function SuperAdminDashboard() {
   const router = useRouter();
 
-  return (
-    <div className="min-h-screen flex flex-col items-center bg-white py-10 px-4">
-      <h1 className="text-2xl md:text-3xl font-semibold text-gray-800 text-center">
-        Login
-      </h1>
-      <h2 className="text-xl text-red-600 font-bold text-center mb-10">
-        Select User Type
-      </h2>
+  const [stats, setStats] = useState({
+    departments: 0,
+    complaints: 0,
+    admins: 0,
+  });
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl w-full justify-items-center">
-        {roles.map((role) => (
-          <Card
-            key={role.label}
-            className="flex flex-col items-center cursor-pointer hover:shadow-xl transition w-40 h-40 justify-center"
-            onClick={() => router.push(role.route)}
-          >
-            <Image
-              src={role.icon}
-              alt={role.label}
-              width={60}
-              height={60}
-              className="mb-3"
-            />
-            <span className="text-center text-sm font-medium text-gray-700">
-              {role.label}
-            </span>
-          </Card>
-        ))}
+  useEffect(() => {
+    // Fetch stats from backend
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/super/stats");
+        const data = await res.json();
+        setStats(data);
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  return (
+    <div className="min-h-screen p-8 bg-gray-100">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        Super Admin Dashboard
+      </h1>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="bg-white shadow rounded-lg p-6 text-center">
+          <h2 className="text-xl font-semibold">Departments</h2>
+          <p className="text-4xl font-bold text-blue-600">{stats.departments}</p>
+        </div>
+        <div className="bg-white shadow rounded-lg p-6 text-center">
+          <h2 className="text-xl font-semibold">Complaints</h2>
+          <p className="text-4xl font-bold text-red-500">{stats.complaints}</p>
+        </div>
+        <div className="bg-white shadow rounded-lg p-6 text-center">
+          <h2 className="text-xl font-semibold">Admins</h2>
+          <p className="text-4xl font-bold text-green-600">{stats.admins}</p>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <button
+          onClick={() => router.push("/super/manage-departments")}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg shadow-lg text-lg font-semibold"
+        >
+          Manage Departments
+        </button>
+        <button
+          onClick={() => router.push("/super/manage-complaints")}
+          className="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-lg shadow-lg text-lg font-semibold"
+        >
+          Manage Complaints
+        </button>
+        <button
+          onClick={() => router.push("/super/admins")}
+          className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg shadow-lg text-lg font-semibold"
+        >
+          View Admins
+        </button>
+        <button
+          onClick={() => router.push("/super/profile")}
+          className="w-full bg-gray-600 hover:bg-gray-700 text-white py-4 rounded-lg shadow-lg text-lg font-semibold"
+        >
+          My Profile
+        </button>
       </div>
     </div>
   );

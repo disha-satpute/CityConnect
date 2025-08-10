@@ -108,3 +108,40 @@ CREATE TABLE redemptions (
     requested_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(10) CHECK (status IN ('Pending', 'Approved', 'Rejected')) DEFAULT 'Pending'
 );
+
+-- Super Admin
+INSERT INTO admins (username, password, email, first_name, last_name, role)
+VALUES (
+    'superadmin1',
+    '$2b$10$eB1J1W2kK6x2zTtOQpY8OehsSUpfPQ1U6VbsFmN6gkDhvH3u.k4fS', -- hashed "superpass123"
+    'superadmin@example.com',
+    'DISHA',
+    'SATPUTE',
+    'superadmin'
+);
+
+-- Dept Admin
+INSERT INTO admins (username, password, email, first_name, last_name, role, )
+VALUES (
+    'deptadmin1',
+    '$2b$10$eB1J1W2kK6x2zTtOQpY8OehsSUpfPQ1U6VbsFmN6gkDhvH3u.k4fS', -- "deptpass123"
+    'deptadmin@example.com',
+    'Vishal',
+    'ghule',
+    'department_admin',
+    
+);
+
+-- Officer
+INSERT INTO admins (username, password, email, first_name, last_name, role, department_id)
+VALUES (
+    'officer1',
+    '$2b$10$eB1J1W2kK6x2zTtOQpY8OehsSUpfPQ1U6VbsFmN6gkDhvH3u.k4fS', -- "officerpass123"
+    'officer@example.com',
+    'Dhiraj',
+    'Dhurgude',
+    'officer',
+    
+);
+
+select * from admins;

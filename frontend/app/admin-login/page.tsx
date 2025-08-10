@@ -1,58 +1,84 @@
 'use client';
-
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card } from '../../components/ui/card';
+import Link from 'next/link';
 
-const roles = [
-  {
-    label: 'User Login',
-    route: '/login/user',
-    icon: 'https://img.icons8.com/ios-filled/100/user.png',
-  },
-  {
-    label: 'Super Admin',
-    route: '/login/super',
-    icon: 'https://img.icons8.com/ios-filled/100/security-shield-green.png',
-  },
-  {
-    label: 'Department Admin',
-    route: '/login/department',
-    icon: 'https://img.icons8.com/ios-filled/100/organization.png',
-  },
-  {
-    label: 'Officer Admin',
-    route: '/login/officer',
-    icon: 'https://img.icons8.com/ios-filled/100/administrator-male.png',
-  },
-];
-
-export default function SelectRolePage() {
+export default function AdminLoginPage() {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || 'Login failed');
+        return;
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('role', data.role);
+
+      if (data.role === 'superadmin') {
+        router.push('/admin-dashboard/super');
+      } else if (data.role === 'department_admin') {
+        router.push('/admin-dashboard/department-admin');
+      } else if (data.role === 'officer') {
+        router.push('/admin-dashboard/officer');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong.');
+    }
+  };
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-blue-100 to-blue-300 py-10 px-4">
-      <h1 className="text-3xl font-bold text-blue-900 mb-2">Login</h1>
-      <h2 className="text-xl text-blue-700 font-semibold mb-10">
-        Select User Type
-      </h2>
+    <div className="min-h-screen flex items-center justify-center bg-blue-50">
+      <div className="bg-white p-6 rounded shadow-md w-96">
+        <h2 className="text-xl font-bold text-center mb-4 text-blue-800">
+          Admin Login
+        </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl w-full justify-items-center">
-        {roles.map((role) => (
-          <Card
-            key={role.label}
-            className="flex flex-col items-center cursor-pointer hover:shadow-2xl transition w-40 h-40 justify-center bg-blue-500 rounded-2xl shadow-md hover:bg-blue-600"
-            onClick={() => router.push(role.route)}
-          >
-            <img
-              src={role.icon}
-              alt={role.label}
-              className="w-14 h-14 mb-3 transition-transform hover:scale-110"
-            />
-            <span className="text-center text-sm font-medium text-white">
-              {role.label}
-            </span>
-          </Card>
-        ))}
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full p-2 mb-3 border rounded"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full p-2 mb-4 border rounded"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button
+          onClick={handleLogin}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+        >
+          Login
+        </button>
+
+        {/* Sign-Up Link */}
+        <p className="mt-4 text-center text-sm">
+          Don’t have an account?{' '}
+          <Link href="/admin-signup" className="text-blue-600 hover:underline">
+            Sign Up
+          </Link>
+        </p>
       </div>
     </div>
   );

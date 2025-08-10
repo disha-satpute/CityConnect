@@ -1,26 +1,30 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
-const adminRoutes = require('./routes/authRoutes');
-
-// Environment variables (optional)
 require('dotenv').config();
+const pool = require('./config/db'); // Just to trigger DB connection
 
-// Middlewares
-app.use(cors()); // Enable CORS for all origins
-app.use(express.json()); // Parse incoming JSON
+const app = express();
 
-// API Routes
-app.use('/api/admin', adminRoutes);
+// Middleware
+app.use(express.json());
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
-// Health check or root
+// Routes
+app.use('/api/admin', require('./routes/adminAuthRoutes'));
+app.use('/api/departments', require('./routes/departments'));
+app.use('/api/complaints', require('./routes/complaints'));
+app.use("/api/super", require("./routes/superRoutes"));
+
+
+
+// Health check00000
 app.get('/', (req, res) => {
-  res.send('CityConnect backend running');
+  res.send('CityConnect backend running 🚀');
 });
 
-// Global error handler (optional but useful)
+// Error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('❌ Global Error:', err.stack);
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
